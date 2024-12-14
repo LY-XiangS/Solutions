@@ -1,0 +1,89 @@
+{
+  "options": {
+    "env": {
+      "Path": "C:\\msys64\\ucrt64\\bin;${env:Path}"
+    }
+  },
+  "tasks": [
+    {
+      "args": [
+        "-g",
+        "${file}",
+        "-o",
+        "${fileDirname}\\${fileBasenameNoExtension}.exe",
+        "-Wpedantic",
+        "-Wall",
+        "-Wextra",
+        "-Og",
+        "-std=c++23"
+      ],
+      "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+      "group": {
+        "isDefault": true,
+        "kind": "test"
+      },
+      "label": "build-debug",
+      "presentation": {
+        "clear": true,
+        "echo": true,
+        "focus": false,
+        "panel": "shared",
+        "reveal": "silent",
+        "showReuseMessage": false
+      },
+      "problemMatcher": "$gcc",
+      "type": "process"
+    },
+    {
+      "args": [
+        "${file}",
+        "-o",
+        "${fileDirname}\\${fileBasenameNoExtension}.exe",
+        "-Wpedantic",
+        "-Wall",
+        "-Wextra",
+        "-O2",
+        "-std=c++23",
+        "-static"
+      ],
+      "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+      "group": {
+        "isDefault": true,
+        "kind": "build"
+      },
+      "label": "build-release",
+      "presentation": {
+        "clear": false,
+        "echo": true,
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false
+      },
+      "problemMatcher": "$gcc",
+      "type": "process"
+    },
+    {
+      "args": [],
+      "command": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+      "dependsOn": "build-debug",
+      "label": "run and pause",
+      "options": {
+        "cwd": "${fileDirname}",
+        "env": {
+          "Path": "C:\\msys64\\ucrt64\\bin;${env:Path}"
+        }
+      },
+      "presentation": {
+        "clear": true,
+        "echo": false,
+        "focus": false,
+        "panel": "shared",
+        "reveal": "never",
+        "showReuseMessage": false
+      },
+      "problemMatcher": [],
+      "type": "pause-console"
+    }
+  ],
+  "version": "2.0.0"
+}
