@@ -11,10 +11,6 @@ int Solution(const vector<vector<int>> &input_map, int input_day)
     struct P
     {
         size_t x, y, q;
-        P move(int dx, int dy) const
-        {
-            return P{x + dx, y + dy, q};
-        }
     };
     vector<P> q, tq;
     for (size_t x = 0; x <= mx; ++x)
@@ -23,21 +19,23 @@ int Solution(const vector<vector<int>> &input_map, int input_day)
                 q.emplace_back(P{x, y, q.size()});
     auto imap{input_map};
     vector<size_t> tot(q.size(), 0);
-    for (++input_day; input_day; --input_day)
+    for (++input_day; input_day > 0; --input_day)
     {
         for (const auto &p : q)
         {
+            if (imap[p.x][p.y] == 1)
+                continue;
             if (imap[p.x][p.y] >= 3)
                 tot[p.q] += imap[p.x][p.y];
             imap[p.x][p.y] = 1;
-            if (p.x > 0 && imap[p.x - 1][p.y] != 1)
-                tq.emplace_back(p.move(-1, 0));
-            if (p.y > 0 && imap[p.x][p.y - 1] != 1)
-                tq.emplace_back(p.move(0, -1));
-            if (p.x < mx && imap[p.x + 1][p.y] != 1)
-                tq.emplace_back(p.move(1, 0));
-            if (p.y < my && imap[p.x][p.y + 1] != 1)
-                tq.emplace_back(p.move(0, 1));
+            if (p.x > 0)
+                tq.emplace_back(P{p.x - 1, p.y, p.q});
+            if (p.y > 0)
+                tq.emplace_back(P{p.x, p.y - 1, p.q});
+            if (p.x < mx)
+                tq.emplace_back(P{p.x + 1, p.y, p.q});
+            if (p.y < my)
+                tq.emplace_back(P{p.x, p.y + 1, p.q});
         }
         q = std::move(tq);
         tq.clear();
@@ -50,7 +48,7 @@ int Solution(const vector<vector<int>> &input_map, int input_day)
 
 class CRC32
 {
-private:
+  private:
     static vector<uint32_t> table;
 
     static void InitializeTable()
@@ -72,7 +70,7 @@ private:
         }
     }
 
-public:
+  public:
     static uint32_t Compute(const string &text)
     {
         if (table.empty())
@@ -107,7 +105,8 @@ void TestCase(const vector<vector<int>> &input_map, int input_day, uint32_t crc3
         {
             totalScore += passScore;
             cout << "Passed"
-                 << "(" << passScore << "/" << passScore << ")" << endl;
+                 << "(" << passScore << "/" << passScore << ") "
+                 << elapsedTime.count() << "ms" << endl;
         }
         else
         {
