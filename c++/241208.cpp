@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
 int Solution(const vector<vector<int>> &input_map, int input_day)
@@ -16,7 +17,7 @@ int Solution(const vector<vector<int>> &input_map, int input_day)
     for (size_t x = 0; x <= mx; ++x)
         for (size_t y = 0; y <= my; ++y)
             if (input_map[x][y] == 2)
-                q.emplace_back(P{x, y, q.size()});
+                q.emplace_back(x, y, q.size());
     auto imap{input_map};
     vector<size_t> tot(q.size(), 0);
     for (++input_day; input_day > 0; --input_day)
@@ -28,14 +29,14 @@ int Solution(const vector<vector<int>> &input_map, int input_day)
             if (imap[p.x][p.y] >= 3)
                 tot[p.q] += imap[p.x][p.y];
             imap[p.x][p.y] = 1;
-            if (p.x > 0)
-                tq.emplace_back(P{p.x - 1, p.y, p.q});
-            if (p.y > 0)
-                tq.emplace_back(P{p.x, p.y - 1, p.q});
-            if (p.x < mx)
-                tq.emplace_back(P{p.x + 1, p.y, p.q});
-            if (p.y < my)
-                tq.emplace_back(P{p.x, p.y + 1, p.q});
+            if (p.x > 0 && imap[p.x - 1][p.y] != 1)
+                tq.emplace_back(p.x - 1, p.y, p.q);
+            if (p.y > 0 && imap[p.x][p.y - 1] != 1)
+                tq.emplace_back(p.x, p.y - 1, p.q);
+            if (p.x < mx && imap[p.x + 1][p.y] != 1)
+                tq.emplace_back(p.x + 1, p.y, p.q);
+            if (p.y < my && imap[p.x][p.y + 1] != 1)
+                tq.emplace_back(p.x, p.y + 1, p.q);
         }
         q = std::move(tq);
         tq.clear();
@@ -48,7 +49,7 @@ int Solution(const vector<vector<int>> &input_map, int input_day)
 
 class CRC32
 {
-  private:
+private:
     static vector<uint32_t> table;
 
     static void InitializeTable()
@@ -70,7 +71,7 @@ class CRC32
         }
     }
 
-  public:
+public:
     static uint32_t Compute(const string &text)
     {
         if (table.empty())

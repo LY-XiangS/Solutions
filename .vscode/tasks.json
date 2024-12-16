@@ -65,7 +65,7 @@
     {
       "args": [],
       "command": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-      "dependsOn": "build-debug",
+      "dependsOn": "build-release",
       "label": "run and pause",
       "options": {
         "cwd": "${fileDirname}",
